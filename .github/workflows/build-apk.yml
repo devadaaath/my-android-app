@@ -16,7 +16,7 @@ jobs:
 
       - name: Extract project
         run: |
-          unzip -q LiquidGlassPDF-Pro-GitHub.zip
+          unzip -oq LiquidGlassPDF-Pro-GitHub.zip
           cp -r LiquidGlassPDF-Pro/app .
           cp LiquidGlassPDF-Pro/build.gradle.kts .
           cp LiquidGlassPDF-Pro/settings.gradle.kts .
