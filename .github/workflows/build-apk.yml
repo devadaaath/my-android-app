@@ -34,12 +34,24 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Set Kotlin JVM target
+      - name: Configure JVM targets
         run: |
-          sed -i '/buildFeatures {/a\    kotlinOptions { jvmTarget = "17" }' app/build.gradle.kts
+          cat >> app/build.gradle.kts <<'EOF'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+
+          kotlin {
+              jvmToolchain(17)
+          }
+          EOF
 
       - name: Build APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
