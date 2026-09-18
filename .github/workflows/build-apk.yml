@@ -34,28 +34,9 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Fix Kotlin JVM target
+      - name: Set Kotlin JVM target
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          p = Path("app/build.gradle.kts")
-          s = p.read_text()
-
-          block = '''
-          kotlinOptions {
-              jvmTarget = "17"
-          }
-          '''
-
-          if "kotlinOptions" not in s:
-              s = s.replace(
-                  '    buildFeatures { compose = true }',
-                  '    buildFeatures { compose = true }\\n' + block
-              )
-
-          p.write_text(s)
-          PY
+          sed -i '/buildFeatures {/a\    kotlinOptions { jvmTarget = "17" }' app/build.gradle.kts
 
       - name: Build APK
         run: gradle assembleDebug --no-daemon
